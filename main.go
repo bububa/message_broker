@@ -4,7 +4,7 @@ import (
 	"flag"
 	"github.com/bububa/goconfig/config"
 	"github.com/bububa/hipchat"
-	"github.com/codeforsystemsbiology/verboselogger"
+	"github.com/bububa/verboselogger"
 	"io/ioutil"
 	"log"
 	"os"
