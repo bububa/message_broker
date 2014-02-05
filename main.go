@@ -2,11 +2,10 @@ package main
 
 import (
 	"flag"
+	log "github.com/bububa/factorlog"
 	"github.com/bububa/goconfig/config"
 	"github.com/bububa/hipchat"
-	"github.com/bububa/verboselogger"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 )
@@ -26,7 +25,7 @@ var (
 	formatFlag  = flag.String("format", hipchat.FormatText, "text or html")
 	colorFlag   = flag.String("color", hipchat.ColorRed, "color")
 	messageFlag = flag.String("message", "", "message to send")
-	logger      *log4go.VerboseLogger
+	logger      *log.FactorLog
 
 	hipchatToken string
 	CacheHosts   []string
@@ -51,32 +50,34 @@ func init() {
 	wechatAppKey, _ = cfg.String("wechat", "appkey")
 	emailUser, err := cfg.String("message_email", "user")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 	emailPasswd, err := cfg.String("message_email", "passwd")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 	emailSmtpHost, err := cfg.String("message_email", "smtphost")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 	emailSmtpPort, err := cfg.String("message_email", "smtpport")
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 	emailAuth = &EmailAuth{User: emailUser, Passwd: emailPasswd, SMTPHost: emailSmtpHost, SMTPPort: emailSmtpPort}
 }
 
-func SetGlobalLogger(logPath string) *log4go.VerboseLogger {
-	logger := log4go.NewVerboseLogger(true, nil, "")
+func SetGlobalLogger(logPath string) *log.FactorLog {
+	sfmt := `%{Color "red:white" "CRITICAL"}%{Color "red" "ERROR"}%{Color "yellow" "WARN"}%{Color "green" "INFO"}%{Color "cyan" "DEBUG"}%{Color "blue" "TRACE"}[%{Date} %{Time}] [%{SEVERITY}:%{ShortFile}:%{Line}] %{Message}%{Color "reset"}`
+	logger := log.New(os.Stdout, log.NewStdFormatter(sfmt))
 	if len(logPath) > 0 {
 		logf, err := os.OpenFile(logPath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0640)
 		if err != nil {
 			return logger
 		}
-		logger = log4go.NewVerboseLogger(true, logf, "")
+		logger = log.New(logf, log.NewStdFormatter(sfmt))
 	}
+	logger.SetSeverities(log.INFO | log.WARN | log.ERROR | log.FATAL | log.CRITICAL)
 	return logger
 }
 

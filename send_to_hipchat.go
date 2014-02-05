@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/bububa/hipchat"
 )
 
 func sendToHipchat(msg string) error {
-	logger.Debug(fmt.Sprintf("Sending message to hipchat: %s", msg))
+	logger.Infof("Sending message to hipchat: %s", msg)
 	c := hipchat.Client{AuthToken: hipchatToken}
 	req := hipchat.MessageRequest{
 		RoomId:        *roomFlag,
@@ -20,6 +19,6 @@ func sendToHipchat(msg string) error {
 		logger.Warn(err)
 		return err
 	}
-	logger.Debug(fmt.Sprintf("Sent message to hipchat: %s", msg))
+	logger.Infof("Sent message to hipchat: %s", msg)
 	return nil
 }

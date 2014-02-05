@@ -1,22 +1,22 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"github.com/bububa/email"
 	"net/smtp"
 	"strings"
-	"fmt"
-	"errors"
 )
 
 type EmailAuth struct {
-	User string
-	Passwd string
+	User     string
+	Passwd   string
 	SMTPHost string
 	SMTPPort string
 }
 
 func sendToEmail(title string, msg string) error {
-	logger.Debug(fmt.Sprintf("Sending message to email: %s", msg))
+	logger.Infof("Sending message to email: %s", msg)
 	if len(title) == 0 {
 		title = "Message From Xibao Message Broker"
 	}
@@ -24,7 +24,7 @@ func sendToEmail(title string, msg string) error {
 	list := strings.Split(mailTo, ";")
 	if len(list) == 0 {
 		err := errors.New("Need receivers")
-		logger.Warn(err)
+		logger.Error(err)
 		return err
 	}
 	m := email.NewMessage(title, msg, *formatFlag)
@@ -35,6 +35,6 @@ func sendToEmail(title string, msg string) error {
 		logger.Warn(err)
 		return err
 	}
-	logger.Debug(fmt.Sprintf("Sent message to email: %s", msg))
+	logger.Infof("Sent message to email: %s", msg)
 	return nil
 }

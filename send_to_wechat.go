@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"github.com/bububa/gomemcache/memcache"
 	"github.com/bububa/wechat"
 	"strings"
@@ -16,7 +15,7 @@ func sendToWechat(msg string) error {
 	wechatClient := wechat.NewClient(wechatAppID, wechatAppKey, cache)
 	toStr := *toFlag
 	receivers := strings.Split(toStr, ",")
-	logger.Debug(fmt.Sprintf("Sending message to wechat: %s", msg))
+	logger.Infof("Sending message to wechat: %s", msg)
 	wechatMsg := &wechat.Message{
 		Type:    "text",
 		Content: msg,
@@ -27,6 +26,6 @@ func sendToWechat(msg string) error {
 		logger.Warn(err)
 		return err
 	}
-	logger.Debug(fmt.Sprintf("Sent message to wechat: %s", msg))
+	logger.Infof("Sent message to wechat: %s", msg)
 	return nil
 }
