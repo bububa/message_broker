@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	log "github.com/bububa/factorlog"
 	"github.com/bububa/goconfig/config"
 	"github.com/bububa/hipchat"
+	log "github.com/kdar/factorlog"
 	"io/ioutil"
 	"os"
 	"strings"
