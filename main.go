@@ -106,8 +106,8 @@ func main() {
 		switch mt {
 		case "hipchat":
 			sendToHipchat(msg)
-		case "wechat":
-			sendToWechat(msg)
+		//case "wechat":
+		//	sendToWechat(msg)
 		case "email":
 			sendToEmail(*titleFlag, msg)
 		}
